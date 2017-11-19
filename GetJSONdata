@@ -1,0 +1,69 @@
+Get JSON data from external URL and display it in a div as plain text:
+
+var getJSON = function(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status == 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status);
+      }
+    };
+    xhr.send();
+};
+
+getJSON('https://www.reddit.com/r/analog/top/.json', function(err, data) {
+  if (err != null) {
+    alert('Something went wrong: ' + err);
+  } else {
+    alert('Your Json result is:  ' + data.result);
+    result.innerText = data.result;
+  }
+
+
+///////////////
+var xmlhttp = new XMLHttpRequest();
+var url = "myTutorials.txt";
+
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var myArr = JSON.parse(this.responseText);
+        myFunction(myArr);
+    }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(arr) {
+    var out = "";
+    var i;
+    for(i = 0; i < arr.length; i++) {
+        out += '<a href="' + arr[i].url + '">' + 
+        arr[i].display + '</a><br>';
+    }
+    document.getElementById("id01").innerHTML = out;
+}
+//////////////
+function loadJSON(file, callBack){
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', file);
+		xhr.send(null);
+
+		xhr.onreadystatechange = function () {
+		  var DONE = 4; // readyState 4 means the request is done.
+		  var OK = 200; // status 200 is a successful return.
+		  if (xhr.readyState === DONE) {
+		    if (xhr.status === OK)
+		    	feedArr =  JSON.parse(xhr.responseText);//push info to the array
+				styleJSON(feedArr);//style output 
+				console.log('feedArr ', feedArr);
+		      	console.log(xhr.responseText); // 'This is the returned text.'
+		    } else {
+		      console.log('Error: ' + xhr.status); // An error occurred during the request.
+		    }
+		  
+		}
+	}

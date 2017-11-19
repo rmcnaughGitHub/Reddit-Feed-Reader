@@ -1,0 +1,198 @@
+//VARS
+$black: #000;
+$white: #fff;
+$darkGrey: #333;
+$darkerGrey: #999;
+$lightGrey: #ccc;
+$blue: #57a2e4;
+$dullGrey: #888888;
+$red: #f00;
+
+body {
+    background-color: $white;
+    //color: $black;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100% !important;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+div {
+	//outline: 1px solid #f00;
+}
+
+.container {
+	margin: 0;
+	padding: 0;
+	width: 100%;	
+}
+.view {
+	height: 450px;
+	margin: 0 auto;
+	width: 360px;
+	margin-top: 50px;
+}
+.header {
+	background-color: $white;
+	border: 1px solid $darkGrey;
+	display: block;
+	float: left;
+	height: 30px;
+	left: 0;
+	margin: 0 0 50px 0 0;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 10;
+}
+.image {
+	background-color: $white;
+	//border: 1px solid $darkGrey;
+	display: block;
+	float: left;
+	height: 252px;
+	overflow: hidden;
+	position: relative;
+	width: 362px;
+}
+.title {
+	background-color: $white;
+	//border: 1px solid $darkGrey;
+	//box-shadow: 0px 4px 5px $dullGrey;
+	display: block;
+	color: $black;
+	float: left;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	height: 120px;
+	line-height: 24px;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: 100%;
+}
+.footer {
+	background-color: $white;
+	border-top: 1px solid $lightGrey;
+	color: darkGrey;
+	display: block;
+	float: left;
+	font-size: 12px;
+	height: 30px;
+	padding: 10px 0 0 0;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: 100%;
+}
+
+.load-feed {
+	background-color: $blue;
+	border-right: 1px solid $darkGrey;
+	color: $white;
+	cursor: pointer;
+	display: block;
+	float: left;
+	height: 30px;
+	padding: 6px 0 0 10px; 
+	position: relative;
+	width: 120px;
+
+	&:hover {
+		color: $lightGrey;
+	};
+}
+
+.favorites {
+	color: $blue;
+	cursor: pointer;
+	font-size: 16px;
+	height: 30px;
+	margin-left: 139px;
+	padding: 6px 0 0 0; 
+	width: auto;
+
+	&:hover {
+		color: $black;
+	};
+}
+
+.content {
+	border: 1px solid $darkGrey;
+	box-shadow: 0px 4px 5px $dullGrey;
+	height: 380px;
+	margin: 0 0 60px 0;
+	overflow: hidden;
+	width: auto;
+
+	&:hover img {
+		cursor: pointer;
+	}
+}
+
+
+/*Icons*/
+.slide {
+	//background: red !important;
+	left: 20px !important;
+	transition: 0.8s !important;
+}
+.red {
+	color: red !important;
+	transition: 0.3s !important;
+}
+.back-color {
+	background-color: $lightGrey !important;
+	transition: 0.3s !important;
+}
+.slide-away {
+	color: red !important;
+	left: 400px !important;
+	transition: 0.8s !important;
+}
+.slide-trash {
+	left: 30px !important;
+	transition: 0.8s !important;
+}
+
+.heart {
+	color: $white;
+	cursor: pointer;
+	font-size: 52px;
+	height: 50px;
+	left: -130px;
+	position: relative;
+    top: 60px;
+    transition: 0.8s;
+    text-shadow: 2px 2px 2px #999;
+    width: 50px;
+
+    &:hover {
+		color: $blue; 
+	};
+}
+
+.trash {
+	color: $white;
+	cursor: pointer;
+	height: 50px;
+	font-size: 52px;
+	left: -130px;
+	position: relative;
+    top: 10px;
+    transition: 0.8s;
+    text-shadow: 2px 2px 2px #999;
+    width: 50px;
+
+    &:hover {
+		color: $blue; 
+	};
+}
+
+#output {
+	display: none;
+	height: 100%;
+	width: auto;
+};
