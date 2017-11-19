@@ -9,24 +9,25 @@ This uses Gulp. Install node (if you don't have it installed) and then run 'npm 
 <br> Note: 'gulp build' is not needed but you can still run it.
 <br>
 # Sites Used
-// http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
 <br>
-// http://jsfiddle.net/p7t2x/60/
+http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
 <br>
-// https://www.sitepoint.com/guide-vanilla-ajax-without-jquery/
+http://jsfiddle.net/p7t2x/60/
 <br>
-// https://webdesign.tutsplus.com/tutorials/
+https://www.sitepoint.com/guide-vanilla-ajax-without-jquery/
+<br>
+https://webdesign.tutsplus.com/tutorials/
 <br>an-example-of-ajax-with-vanilla-javascript--cms-25763
 <br>
-// http://plnkr.co/edit/mbV9toL5CsZ2BwlVEFYH?p=preview
+http://plnkr.co/edit/mbV9toL5CsZ2BwlVEFYH?p=preview
 <br>
-// https://www.smashingmagazine.com/2010/10/local-storage-and-how-to-use-it/
+https://www.smashingmagazine.com/2010/10/local-storage-and-how-to-use-it/
 <br>
-// https://www.webdesignerdepot.com/2013/04/how-to-use-local-storage-for-javascript/
+https://www.webdesignerdepot.com/2013/04/how-to-use-local-storage-for-javascript/
 <br>
 
 //localStorage<br>
-//http://thejackalofjavascript.com/storing-objects-html5-local-storage/
+http://thejackalofjavascript.com/storing-objects-html5-local-storage/
 <br>
 //Operators ++<br>
 https://docs.microsoft.com/en-us/scripting/javascript/reference/
@@ -36,6 +37,6 @@ increment-and-decrement-operators-javascript
 https://stackoverflow.com/questions/4611754/
 javascript-convert-seconds-to-a-date-object#4611809
 <br>
-//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC
 
 
