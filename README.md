@@ -16,8 +16,7 @@ http://jsfiddle.net/p7t2x/60/
 <br>
 https://www.sitepoint.com/guide-vanilla-ajax-without-jquery/
 <br>
-https://webdesign.tutsplus.com/tutorials/
-<br>an-example-of-ajax-with-vanilla-javascript--cms-25763
+https://webdesign.tutsplus.com/tutorials/an-example-of-ajax-with-vanilla-javascript--cms-25763
 <br>
 http://plnkr.co/edit/mbV9toL5CsZ2BwlVEFYH?p=preview
 <br>
