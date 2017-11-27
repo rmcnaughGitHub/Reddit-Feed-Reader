@@ -116,7 +116,7 @@ var feed = (function (app){
 
 						//info
 						indiv.setAttribute('class', 'footer');
-						tdiv.appendChild(indiv);
+						imdiv.appendChild(indiv);
 						indiv.innerHTML = "<i class='fa fa-user' aria-hidden='true'></i> "  + obj.data.author + " ·" 
 							+ " <i class='fa fa-clock-o' aria-hidden='true'></i> " + FormatDateTime(obj.data.created_utc) + " ·"
 							+ " <i class='fa fa-bolt' aria-hidden='true'></i> " + obj.data.score;
