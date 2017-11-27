@@ -13,7 +13,8 @@ var feed = (function (app){
 		feedArr = [],
 		time = 1,
 		i  = 0,
-		str = null;
+		str = null,
+		wdth = '96%';
 
 	function Run(){
 		//ChecklocalStorage();//ChecklocalStorage
@@ -104,21 +105,21 @@ var feed = (function (app){
 								img.src.replace('.jpg',img.src);
 								console.log('png image ', currentImg);
 							}else if( /flickr/.test(img.src) == true ){
-								str = 'The Current Image is loading from Flickr and cannot be dispayed at this time. Please click the image to view on the Flickr site.';
+								str = 'The Current Image is loading from Flickr and cannot be displayed at this time. Please click the image to view on the Flickr site.';
 								img.src.replace('.jpg',img.src);
 								img.setAttribute('alt', str.toUpperCase());
-								img.style.padding = '5px';
-								img.style.width = '99%';
+								img.style.padding = '10px';
+								img.style.width = wdth;
 							}
 							else {
 								img.src = img.src + '.jpg';
 							}	
 						}
 						if( /instagram/.test(img.src) == true ){
-							str = 'The Current Image is loading from Instagram and cannot be dispayed at this time. Please click the image to view on the Instagram site.';
+							str = 'The Current Image is loading from Instagram and cannot be displayed at this time. Please click the image to view on the Instagram site.';
 							img.setAttribute('alt', str.toUpperCase());
-							img.style.padding = '5px';
-							img.style.width = '99%';
+							img.style.padding = '10px';
+							img.style.width = wdth;
 						}
 						img.setAttribute('class', 'image');
 						img.setAttribute('id', 'slide'+index);//
