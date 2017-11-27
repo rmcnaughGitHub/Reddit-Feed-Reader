@@ -12,7 +12,8 @@ var feed = (function (app){
 		favArr = [],
 		feedArr = [],
 		time = 1,
-		i  = 0;
+		i  = 0,
+		str = null;
 
 	function Run(){
 		//ChecklocalStorage();//ChecklocalStorage
@@ -61,18 +62,12 @@ var feed = (function (app){
 		return date.split('.')[0]//.split(' ')[0] + ' ' + epoch.toLocaleTimeString().split(' ')[0];
 	};
 
-	// The "callback" argument is called with either true or false
-	// depending on whether the image at "url" exists or not.
-	function imageExists(url, callback) {
-		var img = new Image();
-		img.onload = function() { callback(true); };
-		img.onerror = function() { callback(false); };
-		img.src = url;
-
-		/*//usage
-		imageExists(imageUrl, function(exists) {
-		  console.log('RESULT: url=' + imageUrl + ', exists=' + exists);
-		});*/
+	//Check last part of URL
+	function checkLastPart(url){
+		var parts = url.split("/");
+	    return (url.lastIndexOf('/') !== url.length - 1 
+	       ? parts[parts.length - 1]
+	       : parts[parts.length - 2]);
 	}
 
 	//Load JSON
@@ -96,12 +91,37 @@ var feed = (function (app){
 							indiv = document.createElement('div'),
 							heart = document.createElement('div'),
 							trash = document.createElement('div');
-							
+
+
 						//image
-						img.src = obj.data.url;// get large image// **obj.data.thumnail** recieves thumb
+						img.src = obj.data.url;
+						//check port of url
+						var currentImg = checkLastPart(img.src);
+						//check regular expression
+						if ( /jpg/.test(currentImg) == false ) {
+							if ( /png/.test(currentImg) == true ) {
+								//replace port
+								img.src.replace('.jpg',img.src);
+								console.log('png image ', currentImg);
+							}else if( /flickr/.test(img.src) == true ){
+								str = 'The Current Image is loading from Flickr and cannot be dispayed at this time. Please click the image to view on the Flickr site.';
+								img.src.replace('.jpg',img.src);
+								img.setAttribute('alt', str.toUpperCase());
+								img.style.padding = '5px';
+								img.style.width = '99%';
+							}
+							else {
+								img.src = img.src + '.jpg';
+							}	
+						}
+						if( /instagram/.test(img.src) == true ){
+							str = 'The Current Image is loading from Instagram and cannot be dispayed at this time. Please click the image to view on the Instagram site.';
+							img.setAttribute('alt', str.toUpperCase());
+							img.style.padding = '5px';
+							img.style.width = '99%';
+						}
 						img.setAttribute('class', 'image');
 						img.setAttribute('id', 'slide'+index);//
-						img.setAttribute('alt', obj.data.author);
 						img.style.maxHeight = '100%';
 						img.style.maxWidth = '100%';
 						div.appendChild(imdiv);// add each image div to "theDiv"
