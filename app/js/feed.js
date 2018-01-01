@@ -164,7 +164,9 @@
 						trash.setAttribute('class', 'trash');
 						trash.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true" style="position:absolute;left:0; vertical-align:middle;"></i>';
 
-						//mouse events
+						eventListeners();
+
+						///mouse events
 						imdiv.addEventListener('mouseover', function(){
 							if ( !heart.classList.contains('slide-away') ){
 								heart.classList.add('slide');
@@ -210,31 +212,49 @@
 							// console.log('Feed ',index, ' removed');
 						});
 
-						//favorites
-						favorites.addEventListener('click', function(){
-							//changebackground color
-							this.classList.add('red');
-							//hide main feed
-							theDiv.style.display = 'none';
-							//show output div
-							output.style.display = 'block';	
-						});
-
-						//load json from load
-						loader.addEventListener('click', function(){
-							location.reload(true);//clear cache
-							loadJSON(jsonFile);
-						});
-
 				});
-
 		      	//console.log(xhr.responseText); // 'This is the returned text.'
 		      	//console.log('feedArr ', feedArr);
-		      	
 		    } else {
 		      console.log('aError: ' + xhr.status); // An error occurred during the request.
 		    }
 
+		};
+
+		function eventListeners(){
+			loader.addEventListener('click', loadClick, false);//reload
+			favorites.addEventListener('click', loadFavs, false);//favorites		
+		};
+
+		function loadClick(){
+			location.reload(true);//clear cache
+			loadJSON(jsonFile);
+		};
+
+		function loadFavs(){
+			//changebackground color
+			this.classList.add('red');
+			//hide main feed
+			theDiv.style.display = 'none';
+			//show output div
+			output.style.display = 'block';	
+		};
+
+		function heartClick(){
+			//slide away each heart
+			this.classList.add('slide-away', 'red');
+			// console.log('Heart Clicked ',index, ' class ', this.classList);
+			
+			//Add to favorites and push to array
+			favArr.push(imdiv);
+			//add to fav num
+			//**If the operator appears before the variable, 
+			//the value is modified before the expression is evaluated**
+			favText.innerHTML = ++favNum;
+			// console.log('favNum = ', favNum);
+			//add to output div
+			duplicate(imdiv, output, true);
+			// console.log('favArr = ', favArr[index]);
 		};
 
 	}
