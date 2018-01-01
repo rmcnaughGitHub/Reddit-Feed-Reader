@@ -23,7 +23,6 @@
 		loadJSON(jsonFile);//load json
 	};
 
-
 	//Function Duplicate
 	function Duplicate(div, divtoAppend){
 		var clone = div.cloneNode(true); // "deep" clone
@@ -109,8 +108,8 @@
 						img.setAttribute('id', 'slide'+index);
 						img.setAttribute('alt', obj.data.title);
 						img.setAttribute('title', obj.data.title);
-						img.style.maxHeight = '100%';
-						img.style.maxWidth = '100%';
+						img.style.height = 'auto';
+						img.style.width = '100%';
 						div.appendChild(imdiv);// add each image div to "theDiv"
 						imdiv.appendChild(img);// add images
 						imdiv.setAttribute('class', 'content');
@@ -125,7 +124,7 @@
 						//check port of url
 						var currentImg = checkLastPart(img.src);
 
-						//check regular expression
+
 						if ( /jpg/.test(currentImg) == false ) {
 							if ( /png/.test(currentImg) == true ) {
 								//replace port
