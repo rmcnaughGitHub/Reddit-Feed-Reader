@@ -18,22 +18,22 @@
 		str = null,
 		wdth = '96%';
 
-	function Run(){
+	function run(){
 		favText.innerHTML = favNum;//fav number
 		loadJSON(jsonFile);//load json
 	};
 
-	//Function Duplicate
-	function Duplicate(div, divtoAppend){
+	//Function duplicate
+	function duplicate(div, divtoAppend){
 		var clone = div.cloneNode(true); // "deep" clone
 		divtoAppend.appendChild(clone);
-		// console.log('Duplicate function: Clone = ',clone);
+		// console.log('duplicate function: Clone = ',clone);
 	};
 
 	//Format Date and Time
 	//** toLocaleDateString() Returns the Date object as a string, 
 	// using locale conventions: 0/01/01**
-	function FormatDateTime(input){
+	function formatDateTime(input){
 		var epoch = new Date(0);
 		epoch.setSeconds(parseInt(input));
 		var date = epoch.toLocaleDateString();
@@ -69,14 +69,6 @@
 			}
 		}
 	};
-
-	//Retain Image aspect ratio
-	function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-		var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-		console.log('ratio: ',ratio, ' ', ' width: ',srcWidth*ratio,' ', ' height: ',srcHeight*ratio )
-		return { width: srcWidth*ratio, height: srcHeight*ratio };
-	};
-
 
 	//Load JSON
 	function loadJSON(file, callBack){
@@ -118,9 +110,6 @@
 						///load image
 						preload(img.src, pBar);		
 
-						//image size ratio
-						calculateAspectRatioFit(img.style.width, img.style.height, img.style.maxHeight, img.style.maxWidth);		
-
 						//check port of url
 						var currentImg = checkLastPart(img.src);
 
@@ -136,6 +125,7 @@
 								img.setAttribute('alt', str.toUpperCase());
 								img.setAttribute('title', str.toUpperCase());
 								img.style.padding = '10px';
+								img.style.height = '';
 								img.style.width = wdth;
 							}
 							else {
@@ -147,6 +137,7 @@
 							img.setAttribute('alt', str.toUpperCase());
 							img.setAttribute('title', str.toUpperCase());
 							img.style.padding = '10px';
+							img.style.height = '';
 							img.style.width = wdth;
 						}
 
@@ -159,7 +150,7 @@
 						indiv.setAttribute('class', 'footer');
 						imdiv.appendChild(indiv);
 						indiv.innerHTML = "<i class='fa fa-user' aria-hidden='true'></i> "  + obj.data.author + " ·" 
-							+ " <i class='fa fa-clock-o' aria-hidden='true'></i> " + FormatDateTime(obj.data.created_utc) + " ·"
+							+ " <i class='fa fa-clock-o' aria-hidden='true'></i> " + formatDateTime(obj.data.created_utc) + " ·"
 							+ " <i class='fa fa-bolt' aria-hidden='true'></i> " + obj.data.score;
 
 						//favorite (heart)
@@ -208,7 +199,7 @@
 							favText.innerHTML = ++favNum;
 							// console.log('favNum = ', favNum);
 							//add to output div
-							Duplicate(imdiv, output, true);
+							duplicate(imdiv, output, true);
 							// console.log('favArr = ', favArr[index]);
 						});
 
@@ -248,7 +239,7 @@
 
 	}
 
-	//Run
-	Run();
+	//run
+	run();
 	
 })();
