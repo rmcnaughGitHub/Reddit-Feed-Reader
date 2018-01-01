@@ -133,6 +133,15 @@ div {
 	}
 }
 
+.progress {
+	background-color: $blue;
+	height: 252px;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 0;
+}
+
 
 /*Icons*/
 .slide {

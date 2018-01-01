@@ -1,4 +1,4 @@
-var feed = (function (app){
+(function (){
 
 	'use strict'
 
@@ -8,6 +8,8 @@ var feed = (function (app){
 		favText = document.getElementById('fav-text'),
 		favorites = document.getElementById('favorites'),
 		output = document.getElementById('output'),
+		pBar = document.createElement('div'),
+		imgLoadInterval = null,
 		favNum = 0,
 		favArr = [],
 		feedArr = [],
@@ -17,40 +19,17 @@ var feed = (function (app){
 		wdth = '96%';
 
 	function Run(){
-		//ChecklocalStorage();//ChecklocalStorage
-		//CheckJSONSupport();////checkx JSON support
 		favText.innerHTML = favNum;//fav number
 		loadJSON(jsonFile);//load json
-	}
+	};
 
-	//Check if localStorage has elements
-	function ChecklocalStorage(){
-		if( localStorage.getItem('item') === null){
-			consloe.log('You have no favorites Stored!!');
-		}
-	}
-
-	//Check JSON support
-	//JSON is not supported in all browser
-	function CheckJSONSupport(){
-		if(!(window.JSON && window.JSON.parse))
-			{
-			    (function() {
-				  function g(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";
-				  else if("function"==b&&"undefined"==typeof a.call)return"object";return b};function h(a){a=""+a;if(/^\s*$/.test(a)?0:/^[\],:{}\s\u2028\u2029]*$/.test(a.replace(/\\["\\\/bfnrtu]/g,"@").replace(/"[^"\\\n\r\u2028\u2029\x00-\x08\x10-\x1f\x80-\x9f]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:[\s\u2028\u2029]*\[)+/g,"")))try{return eval("("+a+")")}catch(b){}throw Error("Invalid JSON string: "+a);}function i(a,b){var c=[];j(new k(b),a,c);return c.join("")}function k(a){this.a=a}
-				  function j(a,b,c){switch(typeof b){case "string":l(b,c);break;case "number":c.push(isFinite(b)&&!isNaN(b)?b:"null");break;case "boolean":c.push(b);break;case "undefined":c.push("null");break;case "object":if(null==b){c.push("null");break}if("array"==g(b)){var f=b.length;c.push("[");for(var d="",e=0;e<f;e++)c.push(d),d=b[e],j(a,a.a?a.a.call(b,""+e,d):d,c),d=",";c.push("]");break}c.push("{");f="";for(e in b)Object.prototype.hasOwnProperty.call(b,e)&&(d=b[e],"function"!=typeof d&&(c.push(f),l(e,c),c.push(":"),
-				    j(a,a.a?a.a.call(b,e,d):d,c),f=","));c.push("}");break;case "function":break;default:throw Error("Unknown type: "+typeof b);}}var m={'"':'\\"',"\\":"\\\\","/":"\\/","\u0008":"\\b","\u000c":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\x0B":"\\u000b"},n=/\uffff/.test("\uffff")?/[\\\"\x00-\x1f\x7f-\uffff]/g:/[\\\"\x00-\x1f\x7f-\xff]/g;
-				  function l(a,b){b.push('"',a.replace(n,function(a){if(a in m)return m[a];var b=a.charCodeAt(0),d="\\u";16>b?d+="000":256>b?d+="00":4096>b&&(d+="0");return m[a]=d+b.toString(16)}),'"')};window.JSON||(window.JSON={});"function"!==typeof window.JSON.stringify&&(window.JSON.stringify=i);"function"!==typeof window.JSON.parse&&(window.JSON.parse=h);
-			})();
-		}
-	}
 
 	//Function Duplicate
 	function Duplicate(div, divtoAppend){
 		var clone = div.cloneNode(true); // "deep" clone
 		divtoAppend.appendChild(clone);
 		// console.log('Duplicate function: Clone = ',clone);
-	}
+	};
 
 	//Format Date and Time
 	//** toLocaleDateString() Returns the Date object as a string, 
@@ -69,7 +48,36 @@ var feed = (function (app){
 	    return (url.lastIndexOf('/') !== url.length - 1 
 	       ? parts[parts.length - 1]
 	       : parts[parts.length - 2]);
-	}
+	};
+
+	//Preload Image
+	function preload(imageArray, progress) {
+        // counter
+	    var i = 0,
+	    	imageObj = new Image(); // create object
+	    // start preloading
+	    for(i=0; i<=imageArray.length; i++) {
+	        imageObj.src = imageArray[i];
+	 		//imgLoadInterval = setInterval(progBar, 10);
+	        //console.log('Preloading Images ',imageArray);
+	    }
+	    
+	    function progBar(){
+			if( imageObj.src ){
+				progress.style.width += 2; 
+			}else if ( progress.style.width == '100%' ){
+				progress.style.display = 'none';
+			}
+		}
+	};
+
+	//Retain Image aspect ratio
+	function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+		var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+		console.log('ratio: ',ratio, ' ', ' width: ',srcWidth*ratio,' ', ' height: ',srcHeight*ratio )
+		return { width: srcWidth*ratio, height: srcHeight*ratio };
+	};
+
 
 	//Load JSON
 	function loadJSON(file, callBack){
@@ -93,11 +101,30 @@ var feed = (function (app){
 							heart = document.createElement('div'),
 							trash = document.createElement('div');
 
-
 						//image
 						img.src = obj.data.url;
+
+						//img attributes
+						img.setAttribute('class', 'image');
+						img.setAttribute('id', 'slide'+index);
+						img.setAttribute('alt', obj.data.title);
+						img.setAttribute('title', obj.data.title);
+						img.style.maxHeight = '100%';
+						img.style.maxWidth = '100%';
+						div.appendChild(imdiv);// add each image div to "theDiv"
+						imdiv.appendChild(img);// add images
+						imdiv.setAttribute('class', 'content');
+						imdiv.setAttribute('id', 'mainDiv'+index);
+
+						///load image
+						preload(img.src, pBar);		
+
+						//image size ratio
+						calculateAspectRatioFit(img.style.width, img.style.height, img.style.maxHeight, img.style.maxWidth);		
+
 						//check port of url
 						var currentImg = checkLastPart(img.src);
+
 						//check regular expression
 						if ( /jpg/.test(currentImg) == false ) {
 							if ( /png/.test(currentImg) == true ) {
@@ -108,6 +135,7 @@ var feed = (function (app){
 								str = 'The Current Image is loading from Flickr and cannot be displayed at this time. Please click the image to view on the Flickr site.';
 								img.src.replace('.jpg',img.src);
 								img.setAttribute('alt', str.toUpperCase());
+								img.setAttribute('title', str.toUpperCase());
 								img.style.padding = '10px';
 								img.style.width = wdth;
 							}
@@ -118,17 +146,10 @@ var feed = (function (app){
 						if( /instagram/.test(img.src) == true ){
 							str = 'The Current Image is loading from Instagram and cannot be displayed at this time. Please click the image to view on the Instagram site.';
 							img.setAttribute('alt', str.toUpperCase());
+							img.setAttribute('title', str.toUpperCase());
 							img.style.padding = '10px';
 							img.style.width = wdth;
 						}
-						img.setAttribute('class', 'image');
-						img.setAttribute('id', 'slide'+index);//
-						img.style.maxHeight = '100%';
-						img.style.maxWidth = '100%';
-						div.appendChild(imdiv);// add each image div to "theDiv"
-						imdiv.appendChild(img);// add images
-						imdiv.setAttribute('class', 'content');
-						imdiv.setAttribute('id', 'mainDiv'+index);
 
 						//title
 						tdiv.setAttribute('class', 'title');
@@ -224,10 +245,7 @@ var feed = (function (app){
 		      console.log('aError: ' + xhr.status); // An error occurred during the request.
 		    }
 
-			return feedArr;
-		  
-		}
-
+		};
 
 	}
 
