@@ -84,7 +84,7 @@
 		    if (xhr.status === OK)
 		    	feedArr =  JSON.parse(xhr.responseText);//push info to the array
 		    	parseArray(feedArr);//parse feed'
-		    	console.log('feedArr ',feedArr);
+		    	//console.log('feedArr ',feedArr);
 				
 		    } else {
 		      console.log('aError: ' + xhr.status); // An error occurred during the request.
@@ -176,9 +176,6 @@
 			trash.setAttribute('class', 'trash');
 			trash.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true" style="position:absolute;left:0; vertical-align:middle;"></i>';
 
-			//evenlisteners
-			eventListeners();
-
 			///mouse events
 			imdiv.addEventListener('mouseover', function(){
 				if ( !heart.classList.contains('slide-away') ){
@@ -241,6 +238,7 @@
 		loader.addEventListener('click', loadClick, false);//reload
 		favorites.addEventListener('click', loadFavs, false);//favorites		
 	};
+	eventListeners();
 
 	function loadClick(){
 		location.reload(true);//clear cache
