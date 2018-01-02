@@ -9,7 +9,7 @@
 		favorites = document.getElementById('favorites'),
 		output = document.getElementById('output'),
 		pBar = document.createElement('div'),
-		imgLoadInterval = null,
+		imgLoadInterval = false,
 		favNum = 0,
 		favArr = [],
 		feedArr = [],
@@ -50,25 +50,35 @@
 	};
 
 	//Preload Image
-	function preload(imageArray, progress) {
-        // counter
-	    var i = 0,
-	    	imageObj = new Image(); // create object
-	    // start preloading
-	    for(i=0; i<=imageArray.length; i++) {
-	        imageObj.src = imageArray[i];
-	 		//imgLoadInterval = setInterval(progBar, 10);
-	        //console.log('Preloading Images ',imageArray);
+	function preload(arr){
+	    var newimages = [], 
+	    	loadedimages = 0,
+	    	postaction = function(){};
+	    var arr = (typeof arr!='object')? [arr] : arr
+	    function imageloadpost(){
+	        loadedimages++;
+	        //console.log('This Image Loaded ',arr);
+	        if (loadedimages === arr.length){
+	            postaction(newimages);
+	        }
 	    }
-	    
-	    function progBar(){
-			if( imageObj.src ){
-				progress.style.width += 2; 
-			}else if ( progress.style.width == '100%' ){
-				progress.style.display = 'none';
-			}
-		}
-	};
+	    for (var i=0; i<arr.length; i++){
+	        newimages[i] = new Image()
+	        newimages[i].src = arr[i]
+	        newimages[i].onload = function(){
+	            imageloadpost();
+	        }
+	        newimages[i].onerror = function(){
+	        	imageloadpost();
+	        }
+	    }
+
+	    return { //return blank object with done() method
+	        done:function(f){
+	            postaction = f || postaction //remember user defined callback functions to be called when images load
+	        }
+	    }
+	}
 
 	//Load JSON
 	function loadJSON(file, callBack){
@@ -84,8 +94,7 @@
 		    if (xhr.status === OK)
 		    	feedArr =  JSON.parse(xhr.responseText);//push info to the array
 		    	parseArray(feedArr);//parse feed'
-		    	//console.log('feedArr ',feedArr);
-				
+		    	//console.log('feedArr ',feedArr);	
 		    } else {
 		      console.log('aError: ' + xhr.status); // An error occurred during the request.
 			}
@@ -121,7 +130,10 @@
 			imdiv.setAttribute('id', 'mainDiv'+index);
 
 			///load image
-			preload(img.src, pBar);		
+			preload(img.src, pBar).done(function(){
+				imgLoadInterval = true;
+				//console.log( 'All Complete');
+			});		
 
 			//check port of url
 			var currentImg = checkLastPart(img.src);
@@ -226,33 +238,20 @@
 
 	};
 
-	//Img
-	/*function imagesExist(){
-		var theImg = document.querySelectorAll('.image');
-		console.log('theImg ',theImg);
-	}*/
-	
-
-	//EventListeners
-	function eventListeners(){
-		loader.addEventListener('click', loadClick, false);//reload
-		favorites.addEventListener('click', loadFavs, false);//favorites		
-	};
-	eventListeners();
-
-	function loadClick(){
+	//EvenListeners
+	loader.addEventListener('click', function(){
 		location.reload(true);//clear cache
 		loadJSON(jsonFile);
-	};
+	});
 
-	function loadFavs(){
+	favorites.addEventListener('click', function(){
 		//changebackground color
 		this.classList.add('red');
 		//hide main feed
 		theDiv.style.display = 'none';
 		//show output div
 		output.style.display = 'block';	
-	};
+	});
 
 	//run
 	run();
