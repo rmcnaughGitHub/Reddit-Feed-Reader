@@ -11,12 +11,6 @@
 		output = document.getElementById('output'),
 		imgLoadInterval = false,
 
-		// divs
-		img = new Image(),
-    	theMainImg = document.createElement('div'),
-    	heart = document.createElement('div'),
-    	trash = document.createElement('div'),
-
 		favNum = 0,
 		favArr = [],
 		feedArr = [],
@@ -28,16 +22,12 @@
 	function run(){
 		favText.innerHTML = favNum;//fav number
 		loadJSON(jsonFile);//load json
-
-		HTMLCollection.prototype.forEach = Array.prototype.forEach;
-		NodeList.prototype.forEach = Array.prototype.forEach;
 	};
 
 	// Function duplicate
 	function duplicate(div, divtoAppend){
 		var clone = div.cloneNode(true); // "deep" clone
 		divtoAppend.appendChild(clone);
-		// console.log('duplicate function: Clone = ',clone);
 	};
 
 	// Format Date and Time
@@ -48,7 +38,7 @@
 		epoch.setSeconds(parseInt(input));
 		var date = epoch.toLocaleDateString();
 		date = date.replace('T', '');
-		return date.split('.')[0]//.split(' ')[0] + ' ' + epoch.toLocaleTimeString().split(' ')[0];
+		return date.split('.')[0];
 	};
 
 	// Check last part of URL
