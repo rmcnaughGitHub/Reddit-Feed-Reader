@@ -210,11 +210,14 @@
 			imgArray = Array.from(img);// Convert an HTMLCollection to an Array
 
 		imgArray.forEach(function(element, i){
+			
 			img[i].addEventListener('mouseover', mouseOver,false);
 			img[i].addEventListener('mouseout', mouseOut,false);
 			img[i].addEventListener('click', imgClick,false);
+
 			heartDiv[i].addEventListener('mouseover', mouseOver,false);
 			heartDiv[i].addEventListener('click', heartClick, false);
+
 			trashDiv[i].addEventListener('mouseover', mouseOver,false);
 			trashDiv[i].addEventListener('click', trashClick, false);
 
@@ -269,7 +272,7 @@
 		output.style.display = 'block';	
 	});
 
-	//run
+	//Run
 	run();
 	
 })();
