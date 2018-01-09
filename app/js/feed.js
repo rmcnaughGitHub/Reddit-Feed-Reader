@@ -90,34 +90,34 @@
 	}
 
 	// Preload Image
-	function preload(arr){
-	    var newimages = [], 
-	    	loadedimages = 0,
-	    	postaction = function(){};//declare empty function
-	    var arr = (typeof arr!='object')? [arr] : arr
-	    function imageloadpost(){
-	        loadedimages++;
-	        //console.log('This Image Loaded ',arr);
-	        if (loadedimages === arr.length){
-	            postaction(newimages);//on complete run postfunction
-	        }
-	    }
-	    for (var i=0; i<arr.length; i++){
-	        newimages[i] = new Image()
-	        newimages[i].src = arr[i]
-	        newimages[i].onload = function(){
-	            imageloadpost();
-	        }
-	        newimages[i].onerror = function(){
-	        	imageloadpost();
-	        }
-	    }
+	/* jshint browser: true */
+	/* exported preload */
+	function preload (arr, cb) {
+	  'use strict';
 
-	    return { //return blank object with done() method
-	        done:function(f){
-	            postaction = f || postaction //remember user defined callback functions to be called when images load
-	        }
+	  var newimages = [], 
+	    loadedimages = 0;
+
+	  // @TODO: Will convert scalar values to an array, but does not
+	  // test if a passed object is actually an array.
+	  arr = (typeof arr !== 'object') ? [arr] : arr;
+
+	  function imageloadpost(){
+	    loadedimages++;
+	    
+	    // If we're done and were passed a callback.
+	    if (loadedimages === arr.length && cb) {
+	      cb(newimages);
 	    }
+	  }
+
+	  for (var i = 0; i < arr.length; i++) {
+	    newimages[i] = new Image();
+	    newimages[i].src = arr[i];
+	    newimages[i].onload = imageloadpost;
+	    newimages[i].onerror = imageloadpost;
+	  }
+
 	}
 
 	// Load JSON
@@ -133,10 +133,9 @@
 		  if (xhr.readyState === DONE) {
 		    if (xhr.status === OK)
 		    	feedArr =  JSON.parse(xhr.responseText);//push info to the array
-		    	parseArray(feedArr);//parse feed'
-		    	//console.log('feedArr ',feedArr);	
+		    	parseArray(feedArr);//parse feed'	
 		    } else {
-		      //console.log('aError: ' + xhr.status); // An error occurred during the request.
+		      //console.log('aError: ' + xhr.status);
 			}
 
 		}
@@ -188,12 +187,13 @@
 			setAttributes(newDivs.trash, {'class':'trash'});
 
 			///load image
-			preload(data.url).done(function(){
-				//console.log('Fully Loaded ',data.url);
+			preload(data.url, function (loadedImages) {
+			  loadedImages.forEach(img => {
+			    //console.log(img.src);
+			  });
 			});
 
-			// Check if URl has .jpg
-			// if !.jpg  add .jpg
+			// Check if URl has .jpg - if !.jpg  add .jpg
 			checkURlJpg(newDivs.img);
 			
 	    });
@@ -246,7 +246,7 @@
 				favArr.push(content[i]);// Add to favorites and push to array
 				// add to fav num
 				favText.innerHTML = ++favNum;// **If the operator appears before the variable, the value is modified before the expression is evaluated**
-				duplicate(content[i], output, true);// add to output div
+				duplicate(content[i], output);// add to output div
 			}
 
 			function trashClick(){
@@ -259,8 +259,7 @@
 	}
 	
 	loader.addEventListener('click', function(){
-		location.reload(true);//clear cache
-		loadJSON(jsonFile);
+		location.reload(true);//clear cache reload
 	});
 
 	favorites.addEventListener('click', function(){
