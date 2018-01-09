@@ -136,7 +136,7 @@
 		    	parseArray(feedArr);//parse feed'
 		    	//console.log('feedArr ',feedArr);	
 		    } else {
-		      console.log('aError: ' + xhr.status); // An error occurred during the request.
+		      //console.log('aError: ' + xhr.status); // An error occurred during the request.
 			}
 
 		}
@@ -210,7 +210,7 @@
 			imgArray = Array.from(img);// Convert an HTMLCollection to an Array
 
 		imgArray.forEach(function(element, i){
-			
+
 			img[i].addEventListener('mouseover', mouseOver,false);
 			img[i].addEventListener('mouseout', mouseOut,false);
 			img[i].addEventListener('click', imgClick,false);
