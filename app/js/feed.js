@@ -4,12 +4,19 @@
 
 	var jsonFile = 'https://www.reddit.com/r/analog/top/.json',//https://www.reddit.com/r/analog/top/.json?limit=15
 		div = document.getElementById('theDiv'),
+
 		loader = document.getElementById('load-feed'),
 		favText = document.getElementById('fav-text'),
 		favorites = document.getElementById('favorites'),
 		output = document.getElementById('output'),
-		pBar = document.createElement('div'),
 		imgLoadInterval = false,
+
+		// divs
+		img = new Image(),
+    	theMainImg = document.createElement('div'),
+    	heart = document.createElement('div'),
+    	trash = document.createElement('div'),
+
 		favNum = 0,
 		favArr = [],
 		feedArr = [],
@@ -21,17 +28,20 @@
 	function run(){
 		favText.innerHTML = favNum;//fav number
 		loadJSON(jsonFile);//load json
+
+		HTMLCollection.prototype.forEach = Array.prototype.forEach;
+		NodeList.prototype.forEach = Array.prototype.forEach;
 	};
 
-	//Function duplicate
+	// Function duplicate
 	function duplicate(div, divtoAppend){
 		var clone = div.cloneNode(true); // "deep" clone
 		divtoAppend.appendChild(clone);
 		// console.log('duplicate function: Clone = ',clone);
 	};
 
-	//Format Date and Time
-	//** toLocaleDateString() Returns the Date object as a string, 
+	// Format Date and Time
+	// ** toLocaleDateString() Returns the Date object as a string, 
 	// using locale conventions: 0/01/01**
 	function formatDateTime(input){
 		var epoch = new Date(0);
@@ -41,7 +51,7 @@
 		return date.split('.')[0]//.split(' ')[0] + ' ' + epoch.toLocaleTimeString().split(' ')[0];
 	};
 
-	//Check last part of URL
+	// Check last part of URL
 	function checkLastPart(url){
 		var parts = url.split("/");
 	    return (url.lastIndexOf('/') !== url.length - 1 
@@ -49,17 +59,57 @@
 	       : parts[parts.length - 2]);
 	};
 
-	//Preload Image
+	// Set Multiple Attributes of to one element
+	function setAttributes(el, attrs) {
+	  for(var key in attrs) {
+	    el.setAttribute(key, attrs[key]);
+	  }
+	};
+
+	// Check If URl has .jpg
+	function checkURlJpg(img){
+		//check port of url
+		var currentImg = checkLastPart(img.src);
+
+		if ( /jpg/.test(currentImg) == false ) {
+			if ( /png/.test(currentImg) == true ) {
+				//replace port
+				img.src.replace('.jpg',img.src);
+				console.log('png image ', currentImg);
+			}else if( /flickr/.test(img.src) == true ){
+				str = 'The Current Image is loading from Flickr and cannot be displayed at this time. Please click the image to view on the Flickr site.';
+				img.src.replace('.jpg',img.src);
+				img.setAttribute('alt', str.toUpperCase());
+				img.setAttribute('title', str.toUpperCase());
+				img.style.padding = '10px';
+				img.style.height = '';
+				img.style.width = wdth;
+			}
+			else {
+				img.src = img.src + '.jpg';
+			}	
+		}
+		if( /instagram/.test(img.src) == true ){
+			str = 'The Current Image is loading from Instagram and cannot be displayed at this time. Please click the image to view on the Instagram site.';
+			img.setAttribute('alt', str.toUpperCase());
+			img.setAttribute('title', str.toUpperCase());
+			img.style.padding = '10px';
+			img.style.height = '';
+			img.style.width = wdth;
+		}
+	}
+
+	// Preload Image
 	function preload(arr){
 	    var newimages = [], 
 	    	loadedimages = 0,
-	    	postaction = function(){};
+	    	postaction = function(){};//declare empty function
 	    var arr = (typeof arr!='object')? [arr] : arr
 	    function imageloadpost(){
 	        loadedimages++;
 	        //console.log('This Image Loaded ',arr);
 	        if (loadedimages === arr.length){
-	            postaction(newimages);
+	            postaction(newimages);//on complete run postfunction
 	        }
 	    }
 	    for (var i=0; i<arr.length; i++){
@@ -80,7 +130,7 @@
 	    }
 	}
 
-	//Load JSON
+	// Load JSON
 	function loadJSON(file, callBack){
 		var xhr = new XMLHttpRequest();
 		//    
@@ -103,142 +153,118 @@
 
 	};
 
-	//Parse the feed
-	function parseArray(array, callback){
-		//loop through each
-		array.data.children.forEach( function(obj, index) {
-			var img = new Image(),
-				imdiv = document.createElement('div'),
-				tdiv = document.createElement('div'),
-				indiv = document.createElement('div'),
-				heart = document.createElement('div'),
-				trash = document.createElement('div');
+	// Parse Array
+	function parseArray(itm){
+	    itm.data.children.forEach( function(itm, index) {
 
-			//image
-			img.src = obj.data.url;
+	    	var data = {
+		        url: itm.data.url,
+		        title: itm.data.title,
+		        info: "<i class='fa fa-user' aria-hidden='true'></i> "  + itm.data.author + " ·" 
+				+ " <i class='fa fa-clock-o' aria-hidden='true'></i> " + formatDateTime(itm.data.created_utc) + " ·"
+				+ " <i class='fa fa-bolt' aria-hidden='true'></i> " + itm.data.score,
+		        score: itm.data.score
+		    },
 
-			//img attributes
-			img.setAttribute('class', 'image');
-			img.setAttribute('id', 'slide'+index);
-			img.setAttribute('alt', obj.data.title);
-			img.setAttribute('title', obj.data.title);
-			img.style.height = 'auto';
-			img.style.width = '100%';
-			div.appendChild(imdiv);// add each image div to "theDiv"
-			imdiv.appendChild(img);// add images
-			imdiv.setAttribute('class', 'content');
-			imdiv.setAttribute('id', 'mainDiv'+index);
+		    newDivs = {
+		    	img: new Image(),
+		    	theMainImg: document.createElement('div'),
+		    	theTitle: document.createElement('div'),
+		    	theInfo: document.createElement('div'),
+		    	heart: document.createElement('div'),
+		    	trash: document.createElement('div'),
+
+		    	styles: function() {
+		    		newDivs.img.style.height = 'auto';
+		    		newDivs.theTitle.innerHTML = data.title;
+		    		newDivs.theInfo.innerHTML = data.info;
+		    		newDivs.heart.innerHTML = '<i class="fa fa-heart" style="position:absolute;left:0; vertical-align:middle;"></i>';
+		    		newDivs.trash.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true" style="position:absolute;left:0; vertical-align:middle;"></i>';
+		    	}
+		    }
+		    newDivs.styles();
+
+		    div.appendChild(newDivs.theMainImg).appendChild(newDivs.img);
+			newDivs.theMainImg.appendChild(newDivs.theTitle);
+			newDivs.theMainImg.appendChild(newDivs.theInfo);
+			newDivs.theMainImg.appendChild(newDivs.heart);
+			newDivs.theMainImg.appendChild(newDivs.trash);
+
+			setAttributes(newDivs.theMainImg, {'class':'content', 'id':'mainDiv'+(index+1)});
+			setAttributes(newDivs.img, {'class':'image', 'src':data.url, 'id':data.title, 'alt':data.title, 'title':data.title});
+			setAttributes(newDivs.theTitle, {'class':'title'});
+			setAttributes(newDivs.theInfo, {'class':'footer'});
+			setAttributes(newDivs.heart, {'class':'heart','id':'heart'+(index +1)});
+			setAttributes(newDivs.trash, {'class':'trash'});
 
 			///load image
-			preload(img.src, pBar).done(function(){
-				imgLoadInterval = true;
-				//console.log( 'All Complete');
-			});		
+			preload(data.url).done(function(){
+				//console.log('Fully Loaded ',data.url);
+			});
 
-			//check port of url
-			var currentImg = checkLastPart(img.src);
+			// Check if URl has .jpg
+			// if !.jpg  add .jpg
+			checkURlJpg(newDivs.img);
+			
+	    });
 
-			if ( /jpg/.test(currentImg) == false ) {
-				if ( /png/.test(currentImg) == true ) {
-					//replace port
-					img.src.replace('.jpg',img.src);
-					console.log('png image ', currentImg);
-				}else if( /flickr/.test(img.src) == true ){
-					str = 'The Current Image is loading from Flickr and cannot be displayed at this time. Please click the image to view on the Flickr site.';
-					img.src.replace('.jpg',img.src);
-					img.setAttribute('alt', str.toUpperCase());
-					img.setAttribute('title', str.toUpperCase());
-					img.style.padding = '10px';
-					img.style.height = '';
-					img.style.width = wdth;
-				}
-				else {
-					img.src = img.src + '.jpg';
-				}	
-			}
-			if( /instagram/.test(img.src) == true ){
-				str = 'The Current Image is loading from Instagram and cannot be displayed at this time. Please click the image to view on the Instagram site.';
-				img.setAttribute('alt', str.toUpperCase());
-				img.setAttribute('title', str.toUpperCase());
-				img.style.padding = '10px';
-				img.style.height = '';
-				img.style.width = wdth;
-			}
+	    imgMouseEvent();
+	}
 
-			//title
-			tdiv.setAttribute('class', 'title');
-			imdiv.appendChild(tdiv);
-			tdiv.innerHTML = obj.data.title;
+	// EvenListeners
+	function imgMouseEvent(arg){
+		var img = document.getElementsByTagName('img'),// out put = HTMLCollection
+			content = document.getElementsByClassName('content'),// out put = HTMLCollection
+			heartDiv = document.getElementsByClassName('heart'),// out put = HTMLCollection
+			trashDiv = document.getElementsByClassName('trash'),// out put = HTMLCollection
+			imgArray = Array.from(img);// Convert an HTMLCollection to an Array
 
-			//info
-			indiv.setAttribute('class', 'footer');
-			imdiv.appendChild(indiv);
-			indiv.innerHTML = "<i class='fa fa-user' aria-hidden='true'></i> "  + obj.data.author + " ·" 
-				+ " <i class='fa fa-clock-o' aria-hidden='true'></i> " + formatDateTime(obj.data.created_utc) + " ·"
-				+ " <i class='fa fa-bolt' aria-hidden='true'></i> " + obj.data.score;
+		imgArray.forEach(function(element, i){
+			img[i].addEventListener('mouseover', mouseOver,false);
+			img[i].addEventListener('mouseout', mouseOut,false);
+			img[i].addEventListener('click', imgClick,false);
+			heartDiv[i].addEventListener('mouseover', mouseOver,false);
+			heartDiv[i].addEventListener('click', heartClick, false);
+			trashDiv[i].addEventListener('mouseover', mouseOver,false);
+			trashDiv[i].addEventListener('click', trashClick, false);
 
-			//favorite (heart)
-			imdiv.appendChild(heart);
-			heart.setAttribute('id', 'heart');
-			heart.setAttribute('class', 'heart');
-			heart.innerHTML = '<i class="fa fa-heart" style="position:absolute;left:0; vertical-align:middle;"></i>';
-
-			//trash
-			imdiv.appendChild(trash);
-			trash.setAttribute('class', 'trash');
-			trash.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true" style="position:absolute;left:0; vertical-align:middle;"></i>';
-
-			///mouse events
-			imdiv.addEventListener('mouseover', function(){
-				if ( !heart.classList.contains('slide-away') ){
-					heart.classList.add('slide');
+			function mouseOver(){
+				if ( !heartDiv[i].classList.contains('slide-away') ){
+						heartDiv[i].classList.add('slide');
 				}else{
-					trash.classList.add('slide-trash');
+					trashDiv[i].classList.add('slide-trash');
 				}
-			});
+			}
 
-			imdiv.addEventListener('mouseout', function(){
-				if ( heart.classList.contains('slide') ){
-					heart.classList.remove('slide');
+			function mouseOut(){
+				if ( heartDiv[i].classList.contains('slide') ){
+						heartDiv[i].classList.remove('slide');
 				}else{
-					trash.classList.remove('slide-trash');
+					trashDiv[i].classList.remove('slide-trash');
 				}
-			});
+			}
 
-			img.addEventListener('click', function(){
-				window.open(obj.data.url,'_new');
-			});
+			function imgClick(){
+				window.open(img[i].src,'_new');
+			}
 
-			//heart
-			heart.addEventListener('click', function(){
-				//slide away each heart
-				this.classList.add('slide-away', 'red');
-				// console.log('Heart Clicked ',index, ' class ', this.classList);
-				
-				//Add to favorites and push to array
-				favArr.push(imdiv);
-				//add to fav num
-				//**If the operator appears before the variable, 
-				//the value is modified before the expression is evaluated**
-				favText.innerHTML = ++favNum;
-				// console.log('favNum = ', favNum);
-				//add to output div
-				duplicate(imdiv, output, true);
-				// console.log('favArr = ', favArr[index]);
-			});
+			function heartClick(){
+				this.classList.add('slide-away', 'red');// slide away each heart
+				favArr.push(content[i]);// Add to favorites and push to array
+				// add to fav num
+				favText.innerHTML = ++favNum;// **If the operator appears before the variable, the value is modified before the expression is evaluated**
+				duplicate(content[i], output, true);// add to output div
+			}
 
-			//trash
-			trash.addEventListener('click', function(){
-				favArr.splice(imdiv);//remove from array
-				imdiv.remove();//delete this div
-				// console.log('Feed ',index, ' removed');
-			});
+			function trashClick(){
+				content[i].style.display = 'none';//hide this div
+			}
 
-		})
+			//console.log('img ',img[i]);
+		});
 
-	};
-
-	//EvenListeners
+	}
+	
 	loader.addEventListener('click', function(){
 		location.reload(true);//clear cache
 		loadJSON(jsonFile);
