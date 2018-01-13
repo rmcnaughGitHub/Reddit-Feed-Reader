@@ -9,6 +9,7 @@
 		favText = document.getElementById('fav-text'),
 		favorites = document.getElementById('favorites'),
 		output = document.getElementById('output'),
+		progress = document.getElementById('progress'),
 		imgLoadInterval = false,
 
 		favNum = 0,
@@ -87,6 +88,14 @@
 			img.style.height = '';
 			img.style.width = wdth;
 		}
+	}
+
+	// Scroll Indicator
+	function scrollIndicatior(bar){
+		var winScroll = document.body.scrollTop || document.documentElement.scrollTop,
+			height = document.documentElement.scrollHeight - document.documentElement.clientHeight,
+			scrolled = (winScroll / height) * 100;
+			bar.style.width = scrolled + '%';
 	}
 
 	// Preload Image
@@ -270,6 +279,10 @@
 		//show output div
 		output.style.display = 'block';	
 	});
+
+	window.onscroll = function() {
+		scrollIndicatior(progress);
+	};
 
 	//Run
 	run();

@@ -31,14 +31,14 @@ div {
 	height: 450px;
 	margin: 0 auto;
 	width: 360px;
-	margin-top: 50px;
+	margin-top: 65px;
 }
 .header {
 	background-color: $white;
-	border: 1px solid $darkGrey;
+	border-top: 1px solid $darkGrey;
 	display: block;
 	float: left;
-	height: 30px;
+	height: 45px;
 	left: 0;
 	margin: 0 0 50px 0 0;
 	overflow: hidden;
@@ -120,6 +120,30 @@ div {
 	};
 }
 
+.bar {
+	background-color: $lightGrey;
+	border-top: 1px solid $darkGrey;
+	border-bottom: 1px solid $darkGrey;
+	display: block;
+	float: left;
+	height: 6px;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 100%;
+
+	.progress {
+		background-color: $blue;
+		border-bottom: 1px solid $darkGrey;
+		height: 6px;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		width: 0;
+	}
+}
+
+
 .content {
 	border: 1px solid $darkGrey;
 	box-shadow: 0px 4px 5px $dullGrey;
@@ -132,16 +156,6 @@ div {
 		cursor: pointer;
 	}
 }
-
-.progress {
-	background-color: $blue;
-	height: 252px;
-	margin: 0;
-	padding: 0;
-	position: relative;
-	width: 0;
-}
-
 
 /*Icons*/
 .slide {
