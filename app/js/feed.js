@@ -5,7 +5,7 @@
 	var jsonFile = 'https://www.reddit.com/r/analog/top/.json',//https://www.reddit.com/r/analog/top/.json?limit=15
 		div = document.getElementById('theDiv'),
 
-		loader = document.getElementById('load-feed'),
+		reloadImg = document.getElementById('load-feed'),
 		favText = document.getElementById('fav-text'),
 		favorites = document.getElementById('favorites'),
 		output = document.getElementById('output'),
@@ -88,7 +88,7 @@
 			img.style.height = '';
 			img.style.width = wdth;
 		}
-	}
+	};
 
 	// Scroll Indicator
 	function scrollIndicatior(bar){
@@ -96,6 +96,17 @@
 			height = document.documentElement.scrollHeight - document.documentElement.clientHeight,
 			scrolled = (winScroll / height) * 100;
 			bar.style.width = scrolled + '%';
+	};
+
+	// Check Window Width
+	function checkWindowWidth(x){
+		var w = window,
+		    d = document,
+		    e = d.documentElement,
+		    g = d.getElementsByTagName('body')[0],
+		    x = w.innerWidth || e.clientWidth || g.clientWidth;
+		console.log('window width ',x);
+		return x;
 	}
 
 	// Preload Image
@@ -253,6 +264,14 @@
 			function heartClick(){
 				this.classList.add('slide-away', 'red');// slide away each heart
 				favArr.push(content[i]);// Add to favorites and push to array
+
+				
+				checkWindowWidth();
+				if(checkWindowWidth() <= 650) {// if phone or tablet hide heart from duplicate file 
+					this.style.display = 'none';
+					console.log('display none');
+				};
+
 				// add to fav num
 				favText.innerHTML = ++favNum;// **If the operator appears before the variable, the value is modified before the expression is evaluated**
 				duplicate(content[i], output);// add to output div
@@ -267,7 +286,7 @@
 
 	}
 	
-	loader.addEventListener('click', function(){
+	reloadImg.addEventListener('click', function(){
 		location.reload(true);//clear cache reload
 	});
 

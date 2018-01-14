@@ -220,3 +220,12 @@ div {
 	height: 100%;
 	width: auto;
 };
+
+/* portrait tablets, portrait iPad, e-readers (Nook/Kindle), 
+landscape 800x480 phones (Android) */ 
+@media (max-width:650px)  { 
+	.heart {
+	    left: 15px !important;
+	    top: 9px!important;
+	}
+}
