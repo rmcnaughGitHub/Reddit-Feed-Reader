@@ -66,7 +66,7 @@
 			if ( /png/.test(currentImg) == true ) {
 				//replace port
 				img.src.replace('.jpg',img.src);
-				console.log('png image ', currentImg);
+				//console.log('png image ', currentImg);
 			}else if( /flickr/.test(img.src) == true ){
 				str = 'The Current Image is loading from Flickr and cannot be displayed at this time. Please click the image to view on the Flickr site.';
 				img.src.replace('.jpg',img.src);
@@ -105,7 +105,7 @@
 		    e = d.documentElement,
 		    g = d.getElementsByTagName('body')[0],
 		    x = w.innerWidth || e.clientWidth || g.clientWidth;
-		console.log('window width ',x);
+
 		return x;
 	}
 
@@ -265,11 +265,11 @@
 				this.classList.add('slide-away', 'red');// slide away each heart
 				favArr.push(content[i]);// Add to favorites and push to array
 
-				
+
 				checkWindowWidth();
 				if(checkWindowWidth() <= 650) {// if phone or tablet hide heart from duplicate file 
 					this.style.display = 'none';
-					console.log('display none');
+					//console.log('display none');
 				};
 
 				// add to fav num
