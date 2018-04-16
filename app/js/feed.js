@@ -208,7 +208,7 @@
 
 			///load image
 			preload(data.url, function (loadedImages) {
-			  loadedImages.forEach(img => {
+			  loadedImages.forEach(function(img) {
 			    //console.log(img.src);
 			  });
 			});
@@ -227,7 +227,7 @@
 			content = document.getElementsByClassName('content'),// out put = HTMLCollection
 			heartDiv = document.getElementsByClassName('heart'),// out put = HTMLCollection
 			trashDiv = document.getElementsByClassName('trash'),// out put = HTMLCollection
-			imgArray = Array.from(img);// Convert an HTMLCollection to an Array
+			imgArray = Array.prototype.slice.call(img, 0);//Array.from(img);// Convert an HTMLCollection to an Array
 
 		imgArray.forEach(function(element, i){
 
